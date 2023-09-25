@@ -1,0 +1,12 @@
+name: stylegan
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - pytorch
+  - pytorch-cuda
+  - torchvision
+  - matplotlib
+  - tensorboard
