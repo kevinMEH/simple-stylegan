@@ -8,20 +8,24 @@ class CLinear(nn.Module):
         super().__init__()
         self.linear = nn.Linear(input, output)
         self.scale = (2 / input)**0.5
+        self.bias = self.linear.bias
+        self.linear.bias = None
         nn.init.normal_(self.linear.weight)
-        nn.init.zeros_(self.linear.bias)
+        nn.init.zeros_(self.bias)
     def forward(self, x):
-        return self.linear(x * self.scale)
+        return self.linear(x * self.scale) + self.bias * self.scale
 
 class CConv2d(nn.Module):
     def __init__(self, input_channels, output_channels, kernel_size, stride=1, padding=0):
         super().__init__()
         self.conv = nn.Conv2d(input_channels, output_channels, kernel_size, stride, padding)
         self.scale = (2 / (input_channels * (kernel_size ** 2))) ** 0.5
+        self.bias = self.conv.bias
+        self.conv.bias = None
         nn.init.normal_(self.conv.weight)
-        nn.init.zeros_(self.conv.bias)
+        nn.init.zeros_(self.bias)
     def forward(self, x):
-        return self.conv(x * self.scale)
+        return self.conv(x * self.scale) + self.bias.view(-1, 1, 1) * self.scale
 
 class MappingNetwork(nn.Module):
     def __init__(self, z_dimensions, w_dimensions, rms_norm_epsilon = 1e-6):
