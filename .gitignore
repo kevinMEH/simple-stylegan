@@ -2,3 +2,4 @@ __pycache__
 data/*
 runs/*
 !.gitkeep
+transfer.ipynb
